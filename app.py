@@ -5,7 +5,9 @@ from folium.plugins import Fullscreen, MiniMap
 from flask import Flask, request, render_template, send_from_directory, jsonify
 
 app = Flask(__name__)
-app.config['UPLOAD_FOLDER'] = 'uploads'
+# Vercel/Render don't guarantee writable filesystems, so ideally, we only process files in-memory
+# However, if an upload folder is strictly necessary, many cloud services allow writing to '/tmp'
+app.config['UPLOAD_FOLDER'] = os.environ.get('UPLOAD_FOLDER', 'uploads')
 os.makedirs(app.config['UPLOAD_FOLDER'], exist_ok=True)
 os.makedirs('templates', exist_ok=True)
 
@@ -116,20 +118,25 @@ def index():
                 ne = df[['LAT', 'LONG']].max().values.tolist()
                 m.fit_bounds([sw, ne])
                 
-                # Save map to templates to be rendered
-                map_html=m._repr_html_()
-                return jsonify({
-                    'success':True,
-                    'avg_sales':avg_sales,
-                    'map_html':map_html
-                })
+                # Get map HTML structure in-memory instead of writing to file
+                # This prevents caching issues & allows seamless cloud deployment on read-only systems
+                map_html = m.get_root().render()
+                
+                # Clean up uploaded file
+                if os.path.exists(filepath):
+                    os.remove(filepath)
+                
+                return jsonify({'success': True, 'avg_sales': avg_sales, 'map_html': map_html})
                 
             except Exception as e:
+                # Clean up uploaded file if process fails
+                if os.path.exists(filepath):
+                    os.remove(filepath)
                 return jsonify({'error': str(e)})
                 
     return render_template('index.html')
 
 if __name__ == '__main__':
-    port = int(os.environ.get("PORT", 5000)) 
-    app.run(host="0.0.0.0", port=port)
-
+    # Cloud-ready port binding
+    port = int(os.environ.get('PORT', 5000))
+    app.run(host='0.0.0.0', port=port, debug=True)
