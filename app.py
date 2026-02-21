@@ -117,20 +117,19 @@ def index():
                 m.fit_bounds([sw, ne])
                 
                 # Save map to templates to be rendered
-                map_html_path = os.path.join('templates', 'map.html')
-                m.save(map_html_path)
-                
-                return jsonify({'success': True, 'avg_sales': avg_sales})
+                map_html=m._repr_html_()
+                return jsonify({
+                    'success':True,
+                    'avg_sales':avg_sales,
+                    'map_html':map_html
+                })
                 
             except Exception as e:
                 return jsonify({'error': str(e)})
                 
     return render_template('index.html')
 
-@app.route('/map')
-def map_view():
-    return render_template('map.html')
-
 if __name__ == '__main__':
     port = int(os.environ.get("PORT", 5000)) 
     app.run(host="0.0.0.0", port=port)
+
