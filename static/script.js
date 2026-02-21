@@ -65,17 +65,19 @@ document.addEventListener('DOMContentLoaded', () => {
 
                 avgSalesValue.textContent = formattedAvg;
 
-                // Add a cache-buster query string so iframe reloads new map
-                mapFrame.src = `/map?t=${new Date().getTime()}`;
+                // Cloud-ready rendering: Ditch the src route and dynamically inject the map
+                // This resolves ALL cached memory issues because the HTML is regenerated dynamically per request
+                const iframeDoc = mapFrame.contentDocument || mapFrame.contentWindow.document;
+                iframeDoc.open();
+                iframeDoc.write(data.map_html);
+                iframeDoc.close();
 
-                // Wait for iframe to load before showing it smoothly
-                mapFrame.onload = () => {
+                // Wait for iframe injection before revealing
+                setTimeout(() => {
                     loading.classList.add('hidden');
                     mapSection.classList.remove('hidden');
-
-                    // Smooth scroll to map
                     mapSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
-                };
+                }, 500); // give iframe a small moment to render Folium scripts
             }
         } catch (error) {
             showMessage('An error occurred while uploading. Please check network and try again.', 'error');
