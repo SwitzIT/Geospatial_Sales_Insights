@@ -1,0 +1,13 @@
+Customer No.,LAT,LONG,Customer Name,Location,Sales
+C001,40.7128,-74.0060,Acme Corp,New York,5000.50
+C002,34.0522,-118.2437,TechFlow,Los Angeles,12000.00
+C003,41.8781,-87.6298,Global Systems,Chicago,3000.00
+C004,29.7604,-95.3698,Innovate LLC,Houston,8500.75
+C005,33.4484,-112.0740,Desert Solutions,Phoenix,4500.00
+C006,39.9526,-75.1652,Liberty Co,Philadelphia,15000.00
+C007,29.4241,-98.4936,River Walk Inc,San Antonio,2500.00
+C008,32.7157,-117.1611,Ocean Views,San Diego,9800.25
+C009,32.7767,-96.7970,Dallas Tech,Dallas,7500.00
+C010,37.3382,-121.8863,Silicon Base,San Jose,11000.00
+C011,30.2672,-97.7431,Austin Innovators,Austin,8000.00
+C012,39.7392,-104.9903,Mile High Data,Denver,4000.00

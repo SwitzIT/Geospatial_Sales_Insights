@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Dynamic and interactive web application to map sales data.">
+    <title>Sales Interactive Map</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+</head>
+
+<body>
+    <div class="container">
+        <header>
+            <h1>Geospatial Sales Insights</h1>
+            <p>Upload your customer CSV/Excel data to visualize sales geographically and compare against the average.
+            </p>
+        </header>
+
+        <main>
+            <section class="upload-section">
+                <form id="uploadForm" enctype="multipart/form-data">
+                    <div class="file-input-wrapper">
+                        <input type="file" id="fileInput" name="file" accept=".csv, .xls, .xlsx" required>
+                        <label for="fileInput" class="btn-primary" id="fileLabel">
+                            <span class="icon">📁</span> Choose CSV/Excel File
+                        </label>
+                        <span id="fileName">No file chosen</span>
+                    </div>
+                    <button type="submit" class="btn-success" id="submitBtn">Generate Map</button>
+                </form>
+
+                <div id="loading" class="hidden">
+                    <div class="spinner"></div>
+                    <p>Processing data and generating your map...</p>
+                </div>
+
+                <div id="message" class="hidden a11y-message" role="alert"></div>
+            </section>
+
+            <section class="map-container hidden" id="mapSection">
+                <div class="stats-panel">
+                    <div class="stat-card">
+                        <h3>Dashboard Insights</h3>
+                        <p class="avg-sales">Average Sales: <span id="avgSalesValue">₹0.00</span></p>
+                    </div>
+                    <div class="legend-card">
+                        <h4>Legend</h4>
+                        <div class="legend">
+                            <div class="legend-item">
+                                <span class="color-box style-above"></span>
+                                <span>Above or Equal to Average</span>
+                            </div>
+                            <div class="legend-item">
+                                <span class="color-box style-below"></span>
+                                <span>Below Average</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="iframe-wrapper">
+                    <iframe id="mapFrame" src="" title="Interactive Sales Map" frameborder="0"></iframe>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <script src="{{ url_for('static', filename='script.js') }}"></script>
+</body>
+
+</html>
