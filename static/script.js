@@ -6,6 +6,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const message = document.getElementById('message');
     const mapSection = document.getElementById('mapSection');
     const mapFrame = document.getElementById('mapFrame');
+    const totalCustomersValue = document.getElementById('totalCustomersValue');
     const avgSalesValue = document.getElementById('avgSalesValue');
     const submitBtn = document.getElementById('submitBtn');
 
@@ -64,6 +65,9 @@ document.addEventListener('DOMContentLoaded', () => {
                 }).format(data.avg_sales);
 
                 avgSalesValue.textContent = formattedAvg;
+                if (totalCustomersValue) {
+                    totalCustomersValue.textContent = data.total_customers;
+                }
 
                 // Cloud-ready rendering: Ditch the src route and dynamically inject the map
                 // This resolves ALL cached memory issues because the HTML is regenerated dynamically per request

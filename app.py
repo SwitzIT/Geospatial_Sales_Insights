@@ -50,15 +50,16 @@ def index():
                     return jsonify({'error': 'No valid geographic data found in the file.'})
                 
                 avg_sales = df['Sales'].mean()
+                total_customers = len(df)
                 
                 center_lat = df['LAT'].mean()
                 center_lon = df['LONG'].mean()
                     
-                m = folium.Map(location=[center_lat, center_lon], zoom_start=5, tiles='CartoDB Positron', control_scale=True)
+                m = folium.Map(location=[center_lat, center_lon], zoom_start=5, control_scale=True)
                 
                 # Add enhanced map plugins
                 Fullscreen(position='topright', title='Expand me', title_cancel='Exit me', force_separate_button=True).add_to(m)
-                MiniMap(tile_layer='CartoDB Positron', position='bottomleft', toggle_display=True, minimized=True).add_to(m)
+                MiniMap(position='bottomleft', toggle_display=True, minimized=True).add_to(m)
                 
                 for _, row in df.iterrows():
                     color_hex = '#10b981' if row['Sales'] >= avg_sales else '#ef4444'
@@ -113,7 +114,7 @@ def index():
                 if os.path.exists(filepath):
                     os.remove(filepath)
                 
-                return jsonify({'success': True, 'avg_sales': avg_sales, 'map_html': map_html})
+                return jsonify({'success': True, 'avg_sales': avg_sales, 'total_customers': int(total_customers), 'map_html': map_html})
                 
             except Exception as e:
                 # Clean up uploaded file if process fails
